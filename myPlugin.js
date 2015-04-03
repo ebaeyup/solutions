@@ -1,61 +1,54 @@
-myPlugin.js(function ($) {
+(function ($) {
     //sample data
-    var data = [{ "title": "event 1", "date": "2014/09/10" },
-                { "title": "event 2", "date": "2014/05/25", "enddate": "2014/09/30" },
-                { "title": "event 3", "date": "2014/09/27" },
-                { "title": "event 4", "date": "2014/09/30" }];
+    var data = [{ "title": "event 1", "date": "2015/09/10" },
+                { "title": "event 2", "date": "2015/09/25", "enddate": "2015/09/30" },
+                { "title": "event 3", "date": "2015/09/27" },
+                { "title": "event 4", "date": "2015/09/30" }];
     // 
     $.fn.theCalendar = function () {
-        var calTemplate = '<div class="cal-container">' +
-          '<div class="cal-grid">' +
-            '<div class="days-of-the-week"></div>' +
-              '<div class="header-day">Pazartesi</div>' +
-              '<div class="header-day">Sali</div>' +
-              '<div class="header-day">Carsamba</div>' +
-              '<div class="header-day">Persembe</div>' +
-              '<div class="header-day">Cuma</div>' +
-              '<div class="header-day">Cumartesi</div>' +
-              '<div class="header-day">Pazar</div>' +
-              '<div class="days">' +
-              '<div class="day day-1"><span class="day-number">1</span></div>' +
-              '<div class="day day-2"><span class="day-number">2</span></div>' +
-              '<div class="day day-3"><span class="day-number">3</span></div>' +
-              '<div class="day day-4"><span class="day-number">4</span></div>' +
-              '<div class="day day-5"><span class="day-number">5</span></div>' +
-              '<div class="day day-6"><span class="day-number">6</span></div>' +
-              '<div class="day day-7"><span class="day-number">7</span></div>' +
-              '<div class="day day-8"><span class="day-number">8</span></div>' +
-              '<div class="day day-9"><span class="day-number">9</span></div>' +
-              '<div class="day day-10"><span class="day-number">10</span></div>' +
-              '<div class="day day-11"><span class="day-number">11</span></div>' +
-              '<div class="day day-12"><span class="day-number">12</span></div>' +
-              '<div class="day day-13"><span class="day-number">13</span></div>' +
-              '<div class="day day-14"><span class="day-number">14</span></div>' +
-              '<div class="day day-15"><span class="day-number">15</span></div>' +
-              '<div class="day day-16"><span class="day-number">16</span></div>' +
-              '<div class="day day-17"><span class="day-number">17</span></div>' +
-              '<div class="day day-18"><span class="day-number">18</span></div>' +
-              '<div class="day day-19"><span class="day-number">19</span></div> ' +
-              '<div class="day day-20"><span class="day-number">20</span></div>' +
-              '<div class="day day-21"><span class="day-number">21</span></div>' +
-              '<div class="day day-22"><span class="day-number">22</span></div>' +
-              '<div class="day day-23"><span class="day-number">23</span></div>' +
-              '<div class="day day-24"><span class="day-number">24</span></div>' +
-              '<div class="day day-25"><span class="day-number">25</span></div>' +
-              '<div class="day day-26"><span class="day-number">26</span></div>' +
-              '<div class="day day-27"><span class="day-number">27</span></div>' +
-              '<div class="day day-28"><span class="day-number">28</span></div>' +
-              '<div class="day day-29"><span class="day-number">29</span></div>' +
-              '<div class="day day-30"><span class="day-number">30</span></div>' +
-              '<div class="day"><span class="day-number"></span></div>' +
-              '<div class="day"><span class="day-number"></span></div>' +
-              '<div class="day"><span class="day-number"></span></div>' +
-              '<div class="day"><span class="day-number"></span></div>' +
-              '<div class="day"><span class="day-number"></span></div>' +
-            '</div>' +
-          '</div>' +
-        '</div>';
-
+		
+		var divCalendar = $('<div class="cal-container" />');
+		
+		var divGrid = $('<div />').addClass('cal-grid');
+				
+		var gun = new Date(data[0].date).getDay();
+		var yil = new Date(data[0].date).getFullYear();
+		var ay = new Date(data[0].date).getMonth();
+		
+		//ay hangi gün başlıyo
+		var ilkGun = new Date(yil,ay,01).getDay();	
+		
+		//ayın gün sayısıı
+		var gunSayisi = new Date(yil, ay, 0).getDate();
+		
+		divCalendar.append(divGrid);
+		
+		var daysoftheweek = $('<div class="days-of-the-week"></div>');
+		
+		divGrid.append(daysoftheweek);
+		
+		//günleri yazdır
+		var array = ["Pazartesi","Sali","Carsamba","Persembe","Cuma","Cumartesi","Pazar"];		
+		for(var i = 0; i<7; i++){
+			daysoftheweek.append('<div class="header-day">'+array[i]+'</div>');
+		}
+		
+		var divDays = $('<div class="days"></div>');
+		daysoftheweek.append(divDays);
+		
+		//eğer ilk gün pazartesi değilse ve hangi gün ise ona göre uygun adette boşluk bırak
+		for(var i = 0; i< ilkGun-1; i++){
+			divDays.append('<div class="day"><span class="day-number"></span></div>');
+		}
+		//günleri doldur
+		for(var i = 0; i< gunSayisi; i++){
+			divDays.append('<div class="day day-'+(i+1)+'"><span class="day-number">'+(i+1)+'</span></div>');
+		}
+		//son alanlarda kalan boşlukları dinamik bir şekilde doldur
+		for(var i = 0; i< 35-(gunSayisi+(ilkGun-1)); i++){
+			divDays.append('<div class="day"><span class="day-number"></span></div>');
+		}
+		
         //Calendar tarih aralıkları kurala uyuyor mu denetimini yaptığımız değişken
         var CalShowStatus = true;
 		var wrongDatedEvent;
@@ -73,7 +66,7 @@ myPlugin.js(function ($) {
 
         //eğer kurala uyuyorsa calendar üzerinde göster
         if (CalShowStatus) {
-            $("div.cal").html(calTemplate);
+            $("div.cal").html(divCalendar);
             for (var i = 0; i < data.length; i++) {
                 var date = new Date(data[i].date).getMonth();
                 var day = new Date(data[i].date).getDate();
@@ -82,52 +75,41 @@ myPlugin.js(function ($) {
                 var eventName = data[i].title;
                 var duration = 1;
                 var size, eventEl;
-                var margin = 20;
+                var margin = 10;
+				var newDay = day;
                 if (data[i].enddate !== undefined) {
                     var enddate = new Date(data[i].enddate);
                     duration = enddate.getDate() - day + 1;
-						        //enddate.getDate() eklenmemesinden kaynaklı sıkıntı düzeltildi..
-                    if (duration > 1 && ((day % 7 > enddate.getDate() % 7) || (day % 7 === 0))) {
-
-                        if (day % 7 === 0) {
-                            size = 1 * 100;
-                        } else {
-                            size = (7 - (day % 7) + 1) * 100;
-                        }
+						//Arkadaşın kodunda enddate.getDate() eklenmemesinden kaynaklı sıkıntı düzeltildi..
 						
-                        margin = i * margin;
-                        eventEl = '<div class="event" style="width:' +
-                          size + '%; margin-top:' + margin + 'px;">' + eventName + '</div>';
-                        $(cl).prepend(eventEl);
-
-                        cl = '.day-' + (day + (7 - (day % 7) + 1));
-						
-                        if (day % 7 === 0) {
-                            size = (duration - 1) * 100;
-                        } else {
-                            size = (duration - (7 - (day % 7) + 1)) * 100;
-                        }
-                        eventEl = '<div class="event" style="width:' +
-                          size + '%; margin-top:' + margin + 'px;">' + eventName + '</div>';
-                        $(cl).prepend(eventEl);
-
-
-                    } else {
-                        size = duration * 100;
-                        eventEl = '<div class="event" style="width:' +
-                          size + '%; margin-top:' + margin + 'px;">' + eventName + '</div>';
-                        $(cl).prepend(eventEl);
-                    }
+							var deneme = cl;
+							
+							for(var k = 0; k< duration; k++){
+								margin = i * margin;
+								eventEl = '<div class="event" style="width:' +
+								100 + '%; margin-top:' + margin + 'px;">' + eventName + '</div>';
+								$(deneme).append(eventEl);
+								
+								if(newDay != enddate){
+									newDay = newDay + 1;
+									deneme = '.day-' + newDay;
+								}else{
+									break;
+								}
+							}
                 } else {
                     margin = i * margin;
                     eventEl = '<div class="event" style="margin-top:' + margin + 'px;">' + eventName + '</div>';
-                    $(cl).prepend(eventEl);
+                    $(cl).append(eventEl);
                 }
             }
         }
-        //eğer kurala uymuyorsa hata mesajını yazdır
+        //eğer kurala uymuyosa hata mesajını yazdr
         else {
             console.log(wrongDatedEvent + " date is not matching with " + data[0].title + "(" +  data[0].date + ")");
         }
     };
+	function addHeaderDay(){
+		
+	}
 })(jQuery);
