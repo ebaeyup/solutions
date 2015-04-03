@@ -58,7 +58,7 @@
             var endDate = new Date(data[i].date).getMonth();
             if (firstDate != endDate) {
                 CalShowStatus = false;
-				wrongDatedEvent = data[i].title;
+		wrongDatedEvent = data[i].title;
                 break;
             }
             else { }
@@ -80,23 +80,21 @@
                 if (data[i].enddate !== undefined) {
                     var enddate = new Date(data[i].enddate);
                     duration = enddate.getDate() - day + 1;
-						//Arkadaşın kodunda enddate.getDate() eklenmemesinden kaynaklı sıkıntı düzeltildi..
-						
-							var deneme = cl;
-							
-							for(var k = 0; k< duration; k++){
-								margin = i * margin;
-								eventEl = '<div class="event" style="width:' +
-								100 + '%; margin-top:' + margin + 'px;">' + eventName + '</div>';
-								$(deneme).append(eventEl);
-								
-								if(newDay != enddate){
-									newDay = newDay + 1;
-									deneme = '.day-' + newDay;
-								}else{
-									break;
-								}
-							}
+		
+			var deneme = cl;
+			for(var k = 0; k< duration; k++){
+				margin = i * margin;
+				eventEl = '<div class="event" style="width:' +
+				100 + '%; margin-top:' + margin + 'px;">' + eventName + '</div>';
+				$(deneme).append(eventEl);
+				
+				if(newDay != enddate){
+					newDay = newDay + 1;
+					deneme = '.day-' + newDay;
+				}else{
+					break;
+				}
+			}
                 } else {
                     margin = i * margin;
                     eventEl = '<div class="event" style="margin-top:' + margin + 'px;">' + eventName + '</div>';
